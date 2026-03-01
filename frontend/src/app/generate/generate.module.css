@@ -1,0 +1,79 @@
+.page {
+    padding: 40px 0 80px;
+}
+
+.header {
+    margin-bottom: 32px;
+    animation: fadeInUp 0.4s ease;
+}
+
+.headerSub {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.charCount {
+    float: right;
+    font-size: 0.78rem;
+    font-weight: 400;
+    font-family: var(--font-mono);
+}
+
+.loadingMessage {
+    text-align: center;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+.loadingMessage p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+
+.tips {
+    margin-top: 40px;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    animation: fadeInUp 0.6s ease;
+}
+
+.tips h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.tips ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tips li {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    padding-left: 16px;
+    position: relative;
+}
+
+.tips li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary-400);
+}

@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String
+  passwordHash   String    @map("password_hash")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  quizzes        Quiz[]
+  quizAttempts   QuizAttempt[]
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model Quiz {
+  id              String    @id @default(cuid())
+  userId          String    @map("user_id")
+  title           String
+  sourceContent   String    @map("source_content") @db.Text
+  summary         String    @db.Text
+  mcqs            Json
+  shortQuestions  Json      @map("short_questions")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempts        QuizAttempt[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("quizzes")
+}
+
+model QuizAttempt {
+  id                  String    @id @default(cuid())
+  userId              String    @map("user_id")
+  quizId              String    @map("quiz_id")
+  mcqAnswers          Json      @map("mcq_answers")
+  mcqScore            Int       @map("mcq_score")
+  shortAnswers        ShortAnswer[]
+  shortAnswerAvg      Float     @default(0) @map("short_answer_avg")
+  comprehensionIndex  Float     @default(0) @map("comprehension_index")
+  completedAt         DateTime  @default(now()) @map("completed_at")
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz                Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([quizId])
+  @@index([completedAt])
+  @@map("quiz_attempts")
+}
+
+model ShortAnswer {
+  id              String    @id @default(cuid())
+  attemptId       String    @map("attempt_id")
+  questionIndex   Int       @map("question_index")
+  answer          String    @db.Text
+  score           Float     @default(0)
+  strength        String    @default("") @db.Text
+  weakness        String    @default("") @db.Text
+  scoredAt        DateTime  @default(now()) @map("scored_at")
+
+  attempt         QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@map("short_answers")
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  action    String
+  count     Int      @default(0)
+  windowStart DateTime @map("window_start")
+
+  @@unique([userId, action, windowStart])
+  @@index([userId, action])
+  @@map("rate_limits")
+}

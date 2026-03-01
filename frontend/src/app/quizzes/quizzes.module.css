@@ -1,0 +1,113 @@
+.page {
+    padding: 40px 0 80px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.4s ease;
+}
+
+.headerSub {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    margin-top: 4px;
+}
+
+.quizGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.quizCard {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.quizCard:hover {
+    border-color: var(--primary-400);
+    background: var(--bg-card-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+}
+
+.quizCardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.quizTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.quizMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+}
+
+.quizCta {
+    margin-top: auto;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--primary-400);
+    transition: color var(--transition-fast);
+}
+
+.quizCard:hover .quizCta {
+    color: var(--primary-300);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 24px;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-xl);
+    animation: fadeInUp 0.4s ease;
+}
+
+.emptyIcon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.emptyState h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.emptyState p {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .quizGrid {
+        grid-template-columns: 1fr;
+    }
+}
