@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kai Exam Buddy</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       TOPBAR
+  ============================================================ -->
+  <header class="topbar">
+    <div class="topbar__logo">
+      <div class="topbar__logo-icon">K</div>
+      Kai Exam Buddy
+    </div>
+
+    <nav class="topbar__nav">
+      <button class="topbar__nav-btn is-active" onclick="showScreen('dashboard')">Dashboard</button>
+      <button class="topbar__nav-btn" onclick="showScreen('upload')">Upload</button>
+      <button class="topbar__nav-btn" onclick="showScreen('quiz')">Quiz</button>
+      <button class="topbar__nav-btn" onclick="showScreen('results')">Results</button>
+      <button class="topbar__nav-btn" onclick="showScreen('classroom')">Classroom</button>
+      <button class="topbar__nav-btn" onclick="showScreen('leaderboard')">Leaderboard</button>
+      <button class="topbar__nav-btn" onclick="showScreen('auth')">Auth</button>
+    </nav>
+
+    <div class="topbar__right">
+      <div class="streak-pill">🔥 14</div>
+      <div class="user-avatar" title="Aryan Mehta">AM</div>
+    </div>
+  </header>
+
+  <!-- Screen switcher ribbon (for prototype navigation) -->
+  <div class="screen-ribbon">
+    <button class="screen-ribbon__btn is-active" onclick="showScreen('dashboard')">① Dashboard</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('upload')">② Upload Notes</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('quiz')">③ Quiz</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('results')">④ Results</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('classroom')">⑤ Classroom</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('leaderboard')">⑥ Leaderboard</button>
+    <button class="screen-ribbon__btn" onclick="showScreen('auth')">⑦ Auth Page</button>
+  </div>
+
+
+  <!-- ============================================================
+       SCREEN: DASHBOARD
+  ============================================================ -->
+  <main id="screen-dashboard" class="screen is-active">
+    <div class="page">
+
+      <!-- Page header -->
+      <div class="dash__header u-flex-between">
+        <div>
+          <h1 class="dash__header">Good morning, Aryan</h1>
+          <p class="u-muted">2 quizzes pending · Classroom battle starts in 3h</p>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="showScreen('upload')">+ Upload Notes</button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stat-row u-grid-4">
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background: #eff6ff">📚</div>
+          <div class="stat-card__num">34</div>
+          <div class="stat-card__lbl">Quizzes Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background: #f0fdf4">🎯</div>
+          <div class="stat-card__num">78%</div>
+          <div class="stat-card__lbl">Average Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background: #fef3c7">🏆</div>
+          <div class="stat-card__num">#4</div>
+          <div class="stat-card__lbl">Classroom Rank</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="background: #fee2e2">📄</div>
+          <div class="stat-card__num">11</div>
+          <div class="stat-card__lbl">Documents Uploaded</div>
+        </div>
+      </div>
+
+      <!-- Quick action cards -->
+      <div class="quick-actions">
+        <div class="action-card action-card--primary" onclick="showScreen('upload')">
+          <div>
+            <h3>Upload &amp; Generate Quiz</h3>
+            <p>Drop your notes and let Kai do the work</p>
+          </div>
+          <div class="action-card__icon">⬆️</div>
+        </div>
+
+        <div class="action-card">
+          <div style="flex: 1">
+            <h3>Join a Classroom</h3>
+            <p>Enter your class code to compete</p>
+            <div class="class-code-row" onclick="event.stopPropagation()">
+              <input class="class-code-input" placeholder="e.g. PHY2-X7K" maxlength="10" />
+              <button class="btn btn-primary btn-sm">Join</button>
+            </div>
+          </div>
+          <div class="action-card__icon" style="margin-left: 16px; align-self: flex-start">👥</div>
+        </div>
+      </div>
+
+      <!-- Recent quizzes + streak/upcoming sidebar -->
+      <div class="dash__bottom">
+
+        <!-- Left: recent quiz list -->
+        <div class="card">
+          <div class="u-flex-between" style="margin-bottom: 6px">
+            <div class="section-label" style="margin: 0">Recent Quizzes</div>
+            <a href="#" style="font-size: 13px; color: var(--c-blue-600)">View all →</a>
+          </div>
+
+          <div class="quiz-list-item">
+            <div class="quiz-list-item__dot" style="background: var(--c-success)"></div>
+            <div>
+              <div class="quiz-list-item__title">Thermodynamics — Chapter 4</div>
+              <div class="quiz-list-item__meta">Yesterday · 20 questions · Physics</div>
+            </div>
+            <div class="quiz-list-item__score">92%</div>
+          </div>
+
+          <div class="quiz-list-item">
+            <div class="quiz-list-item__dot" style="background: var(--c-warning)"></div>
+            <div>
+              <div class="quiz-list-item__title">Organic Chemistry: Alkenes</div>
+              <div class="quiz-list-item__meta">2 days ago · 15 questions · Chemistry</div>
+            </div>
+            <div class="quiz-list-item__score" style="color: var(--c-warning)">67%</div>
+          </div>
+
+          <div class="quiz-list-item">
+            <div class="quiz-list-item__dot" style="background: var(--c-blue-400)"></div>
+            <div>
+              <div class="quiz-list-item__title">Calculus — Integration Techniques</div>
+              <div class="quiz-list-item__meta">4 days ago · 25 questions · Mathematics</div>
+            </div>
+            <div class="quiz-list-item__score">81%</div>
+          </div>
+
+          <div class="quiz-list-item">
+            <div class="quiz-list-item__dot" style="background: var(--c-danger)"></div>
+            <div>
+              <div class="quiz-list-item__title">Cell Biology — Mitosis</div>
+              <div class="quiz-list-item__meta">6 days ago · 18 questions · Biology</div>
+            </div>
+            <div class="quiz-list-item__score" style="color: var(--c-danger)">54%</div>
+          </div>
+
+          <div style="margin-top: 16px">
+            <button class="btn btn-secondary btn-sm" onclick="showScreen('quiz')">▶ Resume Pending Quiz</button>
+          </div>
+        </div>
+
+        <!-- Right: streak + upcoming -->
+        <div>
+          <div class="streak-widget" style="margin-bottom: 14px">
+            <div class="section-label" style="color: rgba(255,255,255,.35); margin-bottom: 8px">Study Streak</div>
+            <div class="streak-widget__num">14</div>
+            <div class="streak-widget__sub">days in a row 🔥</div>
+            <div class="streak-days">
+              <div class="streak-day streak-day--done">M</div>
+              <div class="streak-day streak-day--done">T</div>
+              <div class="streak-day streak-day--done">W</div>
+              <div class="streak-day streak-day--done">T</div>
+              <div class="streak-day streak-day--done">F</div>
+              <div class="streak-day streak-day--today">S</div>
+              <div class="streak-day">S</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-label">Upcoming</div>
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <div class="upcoming-item">
+                <div class="upcoming-item__icon">⚔️</div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 500">PHY-2026 Classroom Battle</div>
+                  <div class="u-muted">Starts in 3h 20m</div>
+                </div>
+              </div>
+              <div class="upcoming-item">
+                <div class="upcoming-item__icon" style="background: var(--c-gray-100)">📋</div>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 500">Weekly Reset</div>
+                  <div class="u-muted">Sunday midnight</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: UPLOAD
+  ============================================================ -->
+  <main id="screen-upload" class="screen">
+    <div class="page--md">
+
+      <div style="margin-bottom: 26px">
+        <h1 style="font-family: var(--font-display); font-size: 26px; font-weight: 600; margin-bottom: 5px">
+          Upload Study Material
+        </h1>
+        <p class="u-muted">Kai will analyze your notes and generate a summary and quiz tailored to your content.</p>
+      </div>
+
+      <!-- Drag-and-drop zone -->
+      <div
+        class="upload-zone"
+        id="dropZone"
+        ondragover="event.preventDefault(); this.classList.add('is-drag-over')"
+        ondragleave="this.classList.remove('is-drag-over')"
+        ondrop="handleFileDrop(event)"
+      >
+        <div class="upload-zone__icon">📄</div>
+        <div class="upload-zone__title">Drop your files here</div>
+        <div class="upload-zone__sub">or click to browse from your computer</div>
+        <button class="btn btn-primary">Browse Files</button>
+        <div class="filetypes">
+          <span class="filetype">PDF</span>
+          <span class="filetype">DOCX</span>
+          <span class="filetype">TXT</span>
+          <span class="filetype">PPT</span>
+          <span class="filetype">Image</span>
+        </div>
+      </div>
+
+      <!-- Generation type selector -->
+      <div class="section-label">Generate</div>
+      <div class="gen-options">
+        <div class="gen-option is-selected" onclick="selectGenOption(this)">
+          <div class="gen-option__header">
+            <div class="radio-dot"></div>
+            Summary + Quiz
+          </div>
+          <div class="gen-option__desc">AI summary and a full MCQ quiz from your notes</div>
+        </div>
+        <div class="gen-option" onclick="selectGenOption(this)">
+          <div class="gen-option__header">
+            <div class="radio-dot"></div>
+            Quiz Only
+          </div>
+          <div class="gen-option__desc">Skip summary, generate questions directly</div>
+        </div>
+        <div class="gen-option" onclick="selectGenOption(this)">
+          <div class="gen-option__header">
+            <div class="radio-dot"></div>
+            Summary Only
+          </div>
+          <div class="gen-option__desc">Condensed notes without a quiz</div>
+        </div>
+        <div class="gen-option" onclick="selectGenOption(this)">
+          <div class="gen-option__header">
+            <div class="radio-dot"></div>
+            Flashcards
+          </div>
+          <div class="gen-option__desc">Key term flashcards for quick revision</div>
+        </div>
+      </div>
+
+      <!-- Quiz settings -->
+      <div class="card" style="margin-bottom: 18px">
+        <h3 style="font-size: 14.5px; font-weight: 600; margin-bottom: 14px">Quiz Settings</h3>
+        <div class="u-grid-2" style="gap: 12px">
+          <div>
+            <label class="form-label">Number of Questions</label>
+            <select class="form-input">
+              <option>10 questions</option>
+              <option selected>20 questions</option>
+              <option>30 questions</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Difficulty</label>
+            <select class="form-input">
+              <option>Easy</option>
+              <option selected>Medium</option>
+              <option>Hard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-primary btn-lg"
+        style="width: 100%; justify-content: center"
+        onclick="triggerLoading()"
+      >
+        Generate with Kai →
+      </button>
+
+      <!-- Loading state (hidden until triggerLoading() is called) -->
+      <div class="card loading-panel" id="loadingPanel" style="display: none; margin-top: 18px">
+        <div class="loading-panel__header">
+          <div class="loading-panel__icon">🤖</div>
+          <h3>Kai is analyzing your notes…</h3>
+          <p class="u-muted" style="font-size: 13px">Usually takes 15–30 seconds</p>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="loading-steps">
+          <div class="loading-step is-done">
+            <div class="loading-step__dot"></div>
+            Parsing document structure
+          </div>
+          <div class="loading-step is-done">
+            <div class="loading-step__dot"></div>
+            Extracting key concepts
+          </div>
+          <div class="loading-step is-current">
+            <div class="loading-step__dot"></div>
+            Generating quiz questions
+          </div>
+          <div class="loading-step">
+            <div class="loading-step__dot"></div>
+            Building weakness model
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: QUIZ
+  ============================================================ -->
+  <main id="screen-quiz" class="screen">
+    <div class="page--md">
+
+      <!-- Progress bar + counter + timer -->
+      <div class="quiz-topbar">
+        <span class="badge badge-blue">Physics</span>
+        <span class="u-muted" style="font-size: 13px; margin-left: 4px">Thermodynamics — Ch 4</span>
+        <div class="quiz-prog-track" style="margin: 0 18px">
+          <div class="quiz-prog-fill" style="width: 25%"></div>
+        </div>
+        <div class="quiz-counter">5 / 20</div>
+        <div class="quiz-timer" style="margin-left: 14px">
+          ⏱ <span id="timerDisplay">12:43</span>
+        </div>
+      </div>
+
+      <!-- Question card -->
+      <div class="card quiz-card">
+        <div class="quiz-q-num">Question 5 of 20</div>
+        <div class="quiz-q-text">
+          According to the First Law of Thermodynamics, which of the following correctly describes
+          the relationship between internal energy, heat, and work done by a system?
+        </div>
+
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="pickOption(this)">
+            <div class="opt-key">A</div>
+            <div class="opt-text">ΔU = Q + W, where W is the work done on the system and Q is heat absorbed</div>
+          </div>
+          <div class="quiz-option is-selected" onclick="pickOption(this)">
+            <div class="opt-key">B</div>
+            <div class="opt-text">ΔU = Q − W, where W is the work done by the system and Q is heat absorbed</div>
+          </div>
+          <div class="quiz-option" onclick="pickOption(this)">
+            <div class="opt-key">C</div>
+            <div class="opt-text">ΔU = Q × W, representing the product of thermal and mechanical energy</div>
+          </div>
+          <div class="quiz-option" onclick="pickOption(this)">
+            <div class="opt-key">D</div>
+            <div class="opt-text">ΔU = W − Q, where Q represents heat released to the surroundings</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation footer -->
+      <div class="quiz-footer">
+        <div class="quiz-footer__meta">
+          <span class="u-muted">Answered: </span><strong>4</strong>
+          <span class="u-muted" style="margin-left: 10px">Skipped: </span><strong>0</strong>
+        </div>
+        <div class="quiz-footer__nav">
+          <button class="btn btn-ghost">← Prev</button>
+          <button class="btn btn-ghost">Skip</button>
+          <button class="btn btn-primary" onclick="showScreen('results')">Next →</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: RESULTS
+  ============================================================ -->
+  <main id="screen-results" class="screen">
+    <div class="page--md">
+
+      <!-- Score hero banner -->
+      <div class="results-hero">
+        <div class="results-hero__inner">
+          <h2>Quiz Complete</h2>
+          <div class="score-ring">
+            <div class="score-pct">82<span>%</span></div>
+          </div>
+          <div class="results-hero__sub">You answered 16 out of 20 questions correctly</div>
+
+          <div class="results-stats">
+            <div>
+              <div class="results-stat__num">16</div>
+              <div class="results-stat__lbl">Correct</div>
+            </div>
+            <div>
+              <div class="results-stat__num" style="color: var(--c-danger)">4</div>
+              <div class="results-stat__lbl">Incorrect</div>
+            </div>
+            <div>
+              <div class="results-stat__num" style="color: var(--c-warning)">12:43</div>
+              <div class="results-stat__lbl">Time Taken</div>
+            </div>
+          </div>
+
+          <div class="results-hero__actions">
+            <button class="btn btn-white btn-sm">📤 Share Score</button>
+            <button class="btn btn-outline-white btn-sm" onclick="showScreen('classroom')">⚔️ Classroom Battle</button>
+            <button class="btn btn-outline-white btn-sm" onclick="showScreen('quiz')">↺ Retake</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strong & weak topic analysis -->
+      <div class="analysis-grid">
+        <div class="card">
+          <h3 style="font-size: 14.5px; margin-bottom: 3px">✅ Strong Topics</h3>
+          <p class="u-muted" style="margin-bottom: 14px">You're solid here</p>
+
+          <div class="topic-row">
+            <div class="topic-name">Entropy</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 95%; background: var(--c-success)"></div></div>
+            <div class="topic-score text-success">95%</div>
+          </div>
+          <div class="topic-row">
+            <div class="topic-name">Heat Transfer</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 90%; background: var(--c-success)"></div></div>
+            <div class="topic-score text-success">90%</div>
+          </div>
+          <div class="topic-row">
+            <div class="topic-name">Laws of Thermo.</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 85%; background: var(--c-success)"></div></div>
+            <div class="topic-score text-success">85%</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 14.5px; margin-bottom: 3px">⚠️ Weak Topics</h3>
+          <p class="u-muted" style="margin-bottom: 14px">Prioritise these in revision</p>
+
+          <div class="topic-row">
+            <div class="topic-name">Carnot Cycle</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 42%; background: var(--c-danger)"></div></div>
+            <div class="topic-score text-danger">42%</div>
+          </div>
+          <div class="topic-row">
+            <div class="topic-name">PV Diagrams</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 55%; background: var(--c-warning)"></div></div>
+            <div class="topic-score text-warning">55%</div>
+          </div>
+          <div class="topic-row">
+            <div class="topic-name">Efficiency Calc.</div>
+            <div class="topic-track"><div class="topic-fill" style="width: 60%; background: var(--c-warning)"></div></div>
+            <div class="topic-score text-warning">60%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar chart -->
+      <div class="card" style="margin-bottom: 16px">
+        <div class="u-flex-between" style="margin-bottom: 4px">
+          <h3 style="font-size: 14.5px">Topic Performance Overview</h3>
+          <span class="badge badge-blue">Thermodynamics</span>
+        </div>
+        <div class="barchart">
+          <div class="barchart__col">
+            <div class="barchart__val text-success">95%</div>
+            <div class="barchart__bar" style="height: 95%; background: var(--c-success); opacity: .75"></div>
+            <div class="barchart__lbl">Entropy</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val text-success">90%</div>
+            <div class="barchart__bar" style="height: 90%; background: var(--c-success); opacity: .75"></div>
+            <div class="barchart__lbl">Heat Transfer</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val text-success">85%</div>
+            <div class="barchart__bar" style="height: 85%; background: var(--c-success); opacity: .75"></div>
+            <div class="barchart__lbl">Laws</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val" style="color: var(--c-blue-500)">80%</div>
+            <div class="barchart__bar" style="height: 80%; background: var(--c-blue-500); opacity: .75"></div>
+            <div class="barchart__lbl">Specific Heat</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val text-warning">60%</div>
+            <div class="barchart__bar" style="height: 60%; background: var(--c-warning); opacity: .85"></div>
+            <div class="barchart__lbl">Efficiency</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val text-warning">55%</div>
+            <div class="barchart__bar" style="height: 55%; background: var(--c-warning); opacity: .85"></div>
+            <div class="barchart__lbl">PV Diagrams</div>
+          </div>
+          <div class="barchart__col">
+            <div class="barchart__val text-danger">42%</div>
+            <div class="barchart__bar" style="height: 42%; background: var(--c-danger); opacity: .85"></div>
+            <div class="barchart__lbl">Carnot</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card">
+        <div class="u-flex-between">
+          <div>
+            <h3 style="font-size: 14.5px; margin-bottom: 3px">Ready to compete?</h3>
+            <p class="u-muted">Your classroom has an active study battle this week.</p>
+          </div>
+          <button class="btn btn-primary" onclick="showScreen('classroom')">Join Classroom Battle →</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: CLASSROOM
+  ============================================================ -->
+  <main id="screen-classroom" class="screen">
+    <div class="page">
+
+      <!-- Hero banner -->
+      <div class="classroom-hero">
+        <div class="classroom-hero__left">
+          <h2>PHY2026 — Advanced Physics</h2>
+          <p>Srinivasa Ramanujan Institute · Section B</p>
+          <div class="classroom-hero__meta">
+            <div class="classroom-hero__meta-item"><strong>42</strong>Members</div>
+            <div class="classroom-hero__meta-item"><strong>#4</strong>Your Rank</div>
+            <div class="classroom-hero__meta-item"><strong>82%</strong>Your Score</div>
+          </div>
+        </div>
+        <div style="text-align: right">
+          <div class="code-chip__label">Class Code</div>
+          <div class="code-chip">PHY2-X7K</div>
+          <div style="color: rgba(255,255,255,.35); font-size: 12px; margin-top: 7px">Share to invite classmates</div>
+        </div>
+      </div>
+
+      <!-- Weekly reset notice -->
+      <div class="reset-notice">
+        <span style="font-size: 15px">🔄</span>
+        <p><strong>Weekly leaderboard resets</strong> in 3 days 7 hours — push harder to secure your rank!</p>
+      </div>
+
+      <div class="u-grid-2">
+
+        <!-- Leaderboard card with podium -->
+        <div class="card">
+          <div class="u-flex-between" style="margin-bottom: 18px">
+            <h3 style="font-size: 14.5px">🏆 Top Performers</h3>
+            <button class="btn btn-secondary btn-sm" onclick="showScreen('leaderboard')">Full Leaderboard →</button>
+          </div>
+
+          <div class="podium">
+            <div class="podium__slot podium__slot--2">
+              <div class="podium__avatar" style="font-size: 15px">P</div>
+              <div class="podium__name">Priya S.</div>
+              <div class="podium__score">91%</div>
+              <div class="podium__block">2</div>
+            </div>
+            <div class="podium__slot podium__slot--1">
+              <div style="font-size: 20px; margin-bottom: 3px">👑</div>
+              <div class="podium__avatar">R</div>
+              <div class="podium__name">Rohan K.</div>
+              <div class="podium__score">96%</div>
+              <div class="podium__block">1</div>
+            </div>
+            <div class="podium__slot podium__slot--3">
+              <div class="podium__avatar">M</div>
+              <div class="podium__name">Meena R.</div>
+              <div class="podium__score">88%</div>
+              <div class="podium__block">3</div>
+            </div>
+          </div>
+
+          <div class="divider" style="margin: 10px 0 8px"></div>
+
+          <div class="lb-row lb-row--you">
+            <div class="lb-rank" style="color: #92400e">4</div>
+            <div class="lb-avatar" style="background: #fef3c7; color: #92400e; border: 2px solid #fcd34d">A</div>
+            <div class="lb-name">Aryan M. <span class="u-muted">(You)</span></div>
+            <div class="lb-score">82%</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">5</div>
+            <div class="lb-avatar">S</div>
+            <div class="lb-name">Siddharth V.</div>
+            <div class="lb-score" style="color: var(--c-gray-700)">79%</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">6</div>
+            <div class="lb-avatar">N</div>
+            <div class="lb-name">Neha T.</div>
+            <div class="lb-score" style="color: var(--c-gray-700)">75%</div>
+          </div>
+        </div>
+
+        <!-- Right: class stats + recent battles -->
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div class="card">
+            <h3 style="font-size: 14.5px; margin-bottom: 14px">📊 Class Activity</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="u-flex-between"><span style="font-size: 13.5px">Quizzes this week</span><strong class="u-mono">127</strong></div>
+              <div class="u-flex-between"><span style="font-size: 13.5px">Active members</span><strong class="u-mono">38 / 42</strong></div>
+              <div class="u-flex-between"><span style="font-size: 13.5px">Class average</span><strong class="u-mono" style="color: var(--c-blue-600)">74%</strong></div>
+              <div class="u-flex-between"><span style="font-size: 13.5px">Top subject</span><span class="badge badge-blue">Thermodynamics</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size: 14.5px; margin-bottom: 12px">📅 Recent Battles</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="u-flex-between" style="font-size: 13.5px">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: var(--c-success)"></div>
+                  Thermodynamics Battle
+                </div>
+                <span class="u-muted">2h ago</span>
+              </div>
+              <div class="u-flex-between" style="font-size: 13.5px">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: var(--c-blue-400)"></div>
+                  Mechanics Weekly Quiz
+                </div>
+                <span class="u-muted">Yesterday</span>
+              </div>
+              <div class="u-flex-between" style="font-size: 13.5px">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div style="width: 7px; height: 7px; border-radius: 50%; background: var(--c-gray-300)"></div>
+                  Optics Sprint
+                </div>
+                <span class="u-muted">3 days ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: LEADERBOARD
+  ============================================================ -->
+  <main id="screen-leaderboard" class="screen">
+    <div class="page">
+
+      <div class="u-flex-between" style="margin-bottom: 22px">
+        <div>
+          <h1 style="font-family: var(--font-display); font-size: 26px; font-weight: 600; margin-bottom: 4px">Leaderboard</h1>
+          <p class="u-muted">Rankings update live · Weekly reset every Sunday midnight</p>
+        </div>
+        <button class="btn btn-secondary">📤 Share My Rank</button>
+      </div>
+
+      <!-- Classroom / Global toggle -->
+      <div class="lb-toggle">
+        <button class="lb-toggle__btn is-active" id="btnClassroom" onclick="toggleLeaderboard('classroom')">Classroom</button>
+        <button class="lb-toggle__btn" id="btnGlobal" onclick="toggleLeaderboard('global')">Global</button>
+      </div>
+
+      <!-- Classroom view -->
+      <div id="lbClassroom">
+        <div class="u-flex-between" style="margin-bottom: 18px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span class="badge badge-blue">PHY2026 — Advanced Physics</span>
+            <span class="u-muted">42 members</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px">
+            <span class="u-muted">Resets in</span>
+            <span class="u-mono" style="font-size: 13px; font-weight: 600; color: var(--c-gray-700)">3d 07h</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden">
+          <!-- Table header -->
+          <div class="lb-table__header">
+            <span style="width: 26px">#</span>
+            <span style="width: 32px"></span>
+            <span style="flex: 1; margin-left: 8px">Student</span>
+            <div style="display: flex; gap: 56px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--c-gray-400)">
+              <span>Score</span><span>Quizzes</span><span>Streak</span><span>Badges</span>
+            </div>
+          </div>
+
+          <div class="lb-table__body">
+
+            <!-- Rank 1 -->
+            <div class="lb-row lb-row--highlight">
+              <div class="lb-rank" style="color: var(--c-warning)">1</div>
+              <div class="lb-avatar" style="background: var(--c-warning); color: #fff; border: 2px solid #fcd34d">R</div>
+              <div class="lb-name">Rohan Kumar <span class="badge badge-amber" style="margin-left: 6px; font-size: 10.5px">👑 Top</span></div>
+              <div class="lb-extra">
+                <div class="lb-score" style="font-size: 15px">96%</div>
+                <div class="lb-extra__val">28</div>
+                <div class="lb-extra__val" style="color: var(--c-warning)">🔥 21</div>
+                <div style="display: flex; gap: 5px; width: 60px">🎓 ⚡</div>
+              </div>
+            </div>
+
+            <!-- Rank 2 -->
+            <div class="lb-row lb-row--highlight">
+              <div class="lb-rank" style="color: #6b7280">2</div>
+              <div class="lb-avatar" style="border: 2px solid var(--c-gray-300)">P</div>
+              <div class="lb-name">Priya Sharma</div>
+              <div class="lb-extra">
+                <div class="lb-score">91%</div>
+                <div class="lb-extra__val">25</div>
+                <div class="lb-extra__val" style="color: var(--c-warning)">🔥 18</div>
+                <div style="display: flex; gap: 5px; width: 60px">🎓</div>
+              </div>
+            </div>
+
+            <!-- Rank 3 -->
+            <div class="lb-row lb-row--highlight">
+              <div class="lb-rank" style="color: #b45309">3</div>
+              <div class="lb-avatar" style="border: 2px solid #cd7f32">M</div>
+              <div class="lb-name">Meena Rajan</div>
+              <div class="lb-extra">
+                <div class="lb-score">88%</div>
+                <div class="lb-extra__val">22</div>
+                <div class="lb-extra__val" style="color: var(--c-warning)">🔥 14</div>
+                <div style="display: flex; gap: 5px; width: 60px">⚡</div>
+              </div>
+            </div>
+
+            <!-- Current user (you) -->
+            <div class="lb-row lb-row--you">
+              <div class="lb-rank">4</div>
+              <div class="lb-avatar" style="background: #fef3c7; color: #92400e; border: 2px solid #fcd34d">A</div>
+              <div class="lb-name">Aryan Mehta <span class="u-muted">(You)</span></div>
+              <div class="lb-extra">
+                <div class="lb-score">82%</div>
+                <div class="lb-extra__val">18</div>
+                <div class="lb-extra__val" style="color: var(--c-warning)">🔥 14</div>
+                <div style="width: 60px; color: var(--c-gray-300)">—</div>
+              </div>
+            </div>
+
+            <!-- Rank 5 -->
+            <div class="lb-row">
+              <div class="lb-rank">5</div>
+              <div class="lb-avatar">S</div>
+              <div class="lb-name">Siddharth Varma</div>
+              <div class="lb-extra">
+                <div class="lb-score" style="color: var(--c-gray-700)">79%</div>
+                <div class="lb-extra__val">16</div>
+                <div class="lb-extra__val" style="color: var(--c-gray-400)">🔥 7</div>
+                <div style="width: 60px; color: var(--c-gray-300)">—</div>
+              </div>
+            </div>
+
+            <!-- Rank 6 -->
+            <div class="lb-row">
+              <div class="lb-rank">6</div>
+              <div class="lb-avatar">N</div>
+              <div class="lb-name">Neha Tiwari</div>
+              <div class="lb-extra">
+                <div class="lb-score" style="color: var(--c-gray-700)">75%</div>
+                <div class="lb-extra__val">14</div>
+                <div class="lb-extra__val" style="color: var(--c-gray-400)">🔥 5</div>
+                <div style="width: 60px; color: var(--c-gray-300)">—</div>
+              </div>
+            </div>
+
+            <div style="padding: 14px 0; text-align: center">
+              <button class="btn btn-secondary btn-sm">Load more</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global leaderboard view (hidden by default) -->
+      <div id="lbGlobal" style="display: none">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px">
+          <span class="badge badge-green">🌐 Global</span>
+          <span class="u-muted">12,483 students worldwide</span>
+        </div>
+
+        <div class="card" style="padding: 40px; text-align: center">
+          <div style="font-size: 36px; margin-bottom: 14px">🌍</div>
+          <h3 style="font-size: 16px; margin-bottom: 6px">You're ranked #847 globally</h3>
+          <p class="u-muted">Top 7% of all Kai Exam Buddy users this week</p>
+          <div style="display: flex; justify-content: center; gap: 28px; margin-top: 22px">
+            <div>
+              <div style="font-size: 20px; font-weight: 700">82%</div>
+              <div class="u-muted" style="font-size: 12px; margin-top: 2px">Avg score</div>
+            </div>
+            <div>
+              <div style="font-size: 20px; font-weight: 700">#847</div>
+              <div class="u-muted" style="font-size: 12px; margin-top: 2px">Global rank</div>
+            </div>
+            <div>
+              <div style="font-size: 20px; font-weight: 700">Top 7%</div>
+              <div class="u-muted" style="font-size: 12px; margin-top: 2px">Percentile</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 22px">📤 Share Global Rank</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       SCREEN: AUTH
+  ============================================================ -->
+  <main id="screen-auth" class="screen">
+
+    <!-- Left brand panel -->
+    <div class="auth__left">
+      <div class="auth__left-inner">
+        <div class="auth__brand">
+          <div class="auth__brand-icon">K</div>
+          <div class="auth__brand-name">Kai Exam Buddy</div>
+        </div>
+        <div class="auth__headline">
+          Study smarter.<br />
+          Compete <em>together.</em><br />
+          Score higher.
+        </div>
+        <div class="auth__tagline">
+          Upload your notes and let Kai generate personalized quizzes, summaries,
+          and competitive classrooms — so you never study alone.
+        </div>
+      </div>
+      <div class="auth__stats">
+        <div>
+          <div class="auth__stat-num">50K+</div>
+          <div class="auth__stat-lbl">Students</div>
+        </div>
+        <div>
+          <div class="auth__stat-num">2M+</div>
+          <div class="auth__stat-lbl">Quizzes Taken</div>
+        </div>
+        <div>
+          <div class="auth__stat-num">94%</div>
+          <div class="auth__stat-lbl">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="auth__right">
+      <h2>Welcome back</h2>
+      <p>Sign in to continue your study streak.</p>
+
+      <!-- Google SSO — inlined SVG avoids external request for icon -->
+      <button class="google-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <div class="auth__or">or sign in with email</div>
+
+      <label class="form-label">Email address</label>
+      <input class="form-input" type="email" placeholder="you@university.edu" />
+
+      <label class="form-label" style="margin-top: 14px">Password</label>
+      <input class="form-input" type="password" placeholder="••••••••" />
+
+      <div style="text-align: right; margin-top: 8px">
+        <a href="#" style="font-size: 13px; color: var(--c-blue-600)">Forgot password?</a>
+      </div>
+
+      <button class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; margin-top: 18px">
+        Sign In
+      </button>
+
+      <div class="auth__terms">
+        Don't have an account? <a href="#">Create one free →</a><br />
+        <span style="margin-top: 6px; display: block">
+          By signing in you agree to our
+          <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </span>
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- JS loaded at end of body so DOM is ready -->
+  <script src="app.js"></script>
+
+</body>
+</html>
