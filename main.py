@@ -12,137 +12,102 @@ import os
 
 if __name__ == "__main__":
 
-    # Initialize modules
     extractor = DocumentExtractor()
     cleaner = TextCleaner()
+    chunker = SemanticChunker(similarity_threshold=0.65)
+    vectordb = VectorDatabase()
+    generator = RAGQuestionGenerator()
+    guard = HallucinationGuard(threshold=0.60)
+    engine = DifficultyEngine()
 
     file_path = "data/sample_notes.pdf"
+    index_path = "vector.index"
+    chunk_path = "chunks.pkl"
 
     if not os.path.exists(file_path):
         print("File not found.")
+        exit()
+
+    # ---------------------------------------------------
+    # STEP 1: Check if Vector DB already exists
+    # ---------------------------------------------------
+
+    if os.path.exists(index_path) and os.path.exists(chunk_path):
+        print("✔ Loading existing vector database...")
+        vectordb.load(index_path, chunk_path)
     else:
+        print("✔ No existing index found. Building new one...")
+
         # Step 1: Extract
         raw_text = extractor.extract(file_path)
-        print("\n✔ Extraction Completed")
+        print("✔ Extraction Completed")
 
-        # Step 2: Clean + Segment
+        # Step 2: Clean
         sentences = cleaner.process(raw_text)
         print("✔ Cleaning Completed")
 
-        print("\nTotal Clean Sentences:", len(sentences))
-        print("\nFirst 5 Sentences:\n")
+        # Step 3: Chunk
+        chunks = chunker.create_chunks(sentences)
+        print("✔ Semantic Chunking Completed")
 
-        for i, sentence in enumerate(sentences[:5], 1):
-            print(f"{i}. {sentence}\n")
+        # Step 4: Build Vector DB
+        vectordb.build_index(chunks)
+        vectordb.save(index_path, chunk_path)
+        print("✔ FAISS Index Built & Saved")
 
+    # ---------------------------------------------------
+    # STEP 5: RAG Question Generation
+    # ---------------------------------------------------
 
+    query = "Explain supervised learning"
+    retrieved_chunks = vectordb.retrieve(query, top_k=3)
+    context_text = " ".join(retrieved_chunks)
 
-chunker = SemanticChunker(similarity_threshold=0.65)
+    print("\n✔ Retrieved Context for Generation")
 
-chunks = chunker.create_chunks(sentences)
+    mcqs = generator.generate(context_text)
 
-print("✔ Semantic Chunking Completed")
-print("Total Chunks Created:", len(chunks))
-print("\nFirst 3 Chunks:\n")
+    print("\nGenerated MCQs:\n")
+    print(mcqs)
 
-for i, chunk in enumerate(chunks[:3], 1):
-    print(f"Chunk {i}:\n{chunk}\n")
+    # ---------------------------------------------------
+    # STEP 6: Hallucination Guard
+    # ---------------------------------------------------
 
-# Step 4: Build Vector DB
-vectordb = VectorDatabase()
-vectordb.build_index(chunks)
+    is_valid, score = guard.verify(mcqs, context_text)
 
-print("✔ FAISS Index Built")
+    print("\n✔ Hallucination Check Completed")
 
-# Test retrieval
-sample_query = "Explain supervised learning"
-
-retrieved_chunks = vectordb.retrieve(sample_query, top_k=3)
-
-print("\nQuery:", sample_query)
-print("\nTop Retrieved Chunks:\n")
-
-for i, chunk in enumerate(retrieved_chunks, 1):
-    print(f"Result {i}:\n{chunk}\n")
-
-# Step 5: Knowledge Graph
-graph_builder = KnowledgeGraphBuilder()
-graph = graph_builder.build_graph(chunks)
-
-print("✔ Knowledge Graph Built")
-print("Total Nodes:", graph.number_of_nodes())
-print("Total Edges:", graph.number_of_edges())
-
-print("\nSample Nodes:")
-for node in list(graph.nodes())[:5]:
-    print(node)
-
-# Step 6: Centrality Scoring
-centrality_engine = ConceptCentrality(graph, chunks)
-concept_scores = centrality_engine.compute_scores()
-
-print("\n✔ Concept Centrality Computed")
-
-print("\nTop 10 Important Concepts:\n")
-for i, (concept, score) in enumerate(list(concept_scores.items())[:10], 1):
-    print(f"{i}. {concept} → {round(score, 4)}")
-
-# Step 7: RAG Question Generation
-
-generator = RAGQuestionGenerator()
-
-# Example query
-query = "Explain supervised learning"
-
-# Retrieve relevant chunks
-retrieved_chunks = vectordb.retrieve(query, top_k=3)
-
-# Combine into context
-context_text = " ".join(retrieved_chunks)
-
-print("\n✔ Retrieved Context for Generation")
-
-mcqs = generator.generate(context_text)
-
-print("\nGenerated MCQs:\n")
-print(mcqs)
-
-# Step 8: Hallucination Guard
-
-guard = HallucinationGuard(threshold=0.60)
-
-is_valid, score = guard.verify(mcqs, context_text)
-
-print("\n✔ Hallucination Check Completed")
-
-
-if isinstance(score, float):
-    if is_valid:
-        print(f"MCQs Accepted ✅ (Grounding Score: {round(score,2)})")
+    if isinstance(score, float):
+        if is_valid:
+            print(f"MCQs Accepted ✅ (Grounding Score: {round(score,2)})")
+        else:
+            print(f"MCQs Rejected ❌ (Grounding Score: {round(score,2)})")
     else:
-        print(f"MCQs Rejected ❌ (Grounding Score: {round(score,2)})")
-else:
-    print(f"MCQs Rejected ❌ ({score})")
+        print(f"MCQs Rejected ❌ ({score})")
+        exit()
 
-engine = DifficultyEngine()
+    # ---------------------------------------------------
+    # STEP 7: Adaptive Difficulty Quiz
+    # ---------------------------------------------------
 
-for q in mcqs:
-    level = classifier.classify(q)
+    if isinstance(mcqs, str):
+        mcqs = [mcqs]
 
-    print(f"\nQuestion: {q}")
-    print(f"Bloom Level: {level}")
+    for q in mcqs:
+        print("\nQuestion:", q)
 
-    user_answer = input("Enter your answer (A/B/C/D): ")
+        user_answer = input("Enter your answer (A/B/C/D): ")
 
-    # For now simulate correct answer as "A"
-    correct_answer = "A"
+        # TODO: Replace with real answer extraction logic
+        correct_answer = "A"
 
-    if user_answer.upper() == correct_answer:
-        print("Correct ✅")
-        engine.update_score(True)
-    else:
-        print("Wrong ❌")
-        engine.update_score(False)
+        if user_answer.upper() == correct_answer:
+            print("Correct ✅")
+            engine.update_score(True)
+        else:
+            print("Wrong ❌")
+            engine.update_score(False)
 
-    print("Current Accuracy:", round(engine.get_accuracy(),2))
-    print("Next Difficulty:", engine.get_next_difficulty())
+        print("Current Accuracy:", round(engine.get_accuracy(), 2))
+        print("Next Difficulty:", engine.get_next_difficulty())
