@@ -49,9 +49,7 @@ npm run dev
 |---|---|---|
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
 | `JWT_SECRET` | Secret for JWT signing | `your-secret-key` |
-| `GROQ_API_KEY` | Groq API key | `gsk_...` |
-| `GROQ_MODEL` | Model to use | `llama-3.3-70b-versatile` |
-| `AI_PROVIDER` | `groq` or `openrouter` | `groq` |
+| **AI:** Fine-tuned Transformer (t5-small, local inference) |
 | `FRONTEND_URL` | CORS origin | `http://localhost:3000` |
 
 ### Frontend (.env.local)
